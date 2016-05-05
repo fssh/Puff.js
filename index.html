@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>puff.js——支持触屏</title>
+    <meta author="fsh" qq="741691336" weixin="忘我之鱼" />
+    <style type="text/css">
+    html,
+    body {
+        height: 100%;
+    }
+    body {
+        font-family: "Microsoft YaHei","微软雅黑";
+        font-size: 20px;
+        color: #fff;
+        background-color: gray;
+    }
+    #test {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        background-image: -moz-repeating-radial-gradient(100px 100px, #333 0px, #333 10px, transparent 10px, transparent 20px);
+        background-image: -webkit-repeating-radial-gradient(100px 100px, #333 0px, #333 10px, transparent 10px, transparent 20px);
+        background-image: repeating-radial-gradient(at 100px 100px, #333 0px, #333 10px, transparent 10px, transparent 20px);
+        font-size: 32px;
+        line-height: 200px;
+        text-align: center;
+        margin: 0 auto;
+    }
+    #ball {
+        display: block;
+        width: 200px;
+        height: 200px;
+        border:none;
+        padding:0;
+        background-image: -moz-radial-gradient(35px 35px, #FFF, #999, #FFF);
+        background-image: -webkit-radial-gradient(35px 35px, #FFF, #999, #FFF);
+        background-image: radial-gradient(at 35px 35px, #FFF, #999, #FFF);
+        border-radius: 100px;
+        color: purple;
+        font-size: 32px;
+        line-height: 200px;
+        text-align: center;
+        margin:0 auto;
+    }
+    .Puff {
+        cursor: pointer;
+    }
+    </style>
+    <script type="text/javascript" src="puff.js"></script>
+</head>
+
+<body>
+    <p id="intro">
+        <b>使用说明:</b><br/>
+        1、引入puff.js<br/>
+        2、给要加膨胀特效的元素加两个类，形式如下：<br/>
+        类一：Puff<br/>
+        类二：Puff_<初始膨胀位置百分比>_<膨胀颜色r分量>_<膨胀颜色g分量>_<膨胀颜色b分量>，
+              可选，默认是Puff_0_200_200_200
+    </p>
+    <div id="test" class="Puff Puff_0_0_255_0">点我膨胀绿圈</div>
+    <button id="ball" class="Puff Puff_0_255_255_0">点我膨胀黄圈</button>
+    <script type="text/javascript">
+        var eTest=document.getElementById("test");
+        var eBall=document.getElementById("ball");
+        eTest.addEventListener("touchstart",ff);
+        eTest.addEventListener("click",ff);
+        function ff(){
+            eBall.style.opacity=0.5;
+        }
+    </script>
+</body>
+
+</html>
