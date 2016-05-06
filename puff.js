@@ -31,9 +31,7 @@
             });
             ePuffs[i].addEventListener("click", fnClick);
         }
-
         function fnClick(event) {
-            var self = event.target;
             if (event.touches) {
                 event = event.touches[event.touches.length - 1]; //如果变成event=event.touches[0]；则多指同时触控会发生圆的扩散传递，若元素相邻，有惊喜，效果很神奇
             }
@@ -46,30 +44,41 @@
                 x = event.pageX;
                 y = event.pageY;
             }
-            x -= this.offsetLeft;
-            y -= this.offsetTop;
+            //计算offsetLeft，offsetTop
+            var ele = this,
+                offsetLeft = 0,
+                offsetTop = 0;
+            while (ele.offsetParent) { //止于body
+                offsetLeft += ele.offsetLeft;
+                offsetTop += ele.offsetTop;
+                ele = ele.offsetParent;
+            }
+            //计算触点坐标
+            x -= offsetLeft;
+            y -= offsetTop;
             //圓的大小，放大原图大小的4倍
             var size = width > height ? width * 4 : height * 4;
             //把背景圖的中心點移到觸點
             x -= size / 2;
             y -= size / 2;
-            // console.log(this.percent, this.cr, this.cg, this.cb)
-            fnPuff(self, self.percent, x, y, size, this.bg, this.bs, this.bp, this.br);
+            this.x = x;
+            this.y = y;
+            this.size = size;
+            fnPuff(this, this.percent);
         }
-
-        function fnPuff(ele, i, x, y, size, bg, bs, bp, br) { //参数：1、填加膨胀特效的元素 2、从哪开始膨胀（百分比）3、相對于元素中心點的偏移量x分量 4、相對于元素中心點的偏移量y分量 5、圓的大小 6、元素原来的背景图 7、元素原来的背景图大小 8、元素原来的背景图位置 9、元素原来的背景图重复属性
+        function fnPuff(ele, i) { //参数：1、填加膨胀特效的元素 2、从哪开始膨胀（百分比)
             var opacity = 1 - i / 100;
-            ele.style.backgroundImage = "radial-gradient(at " + size / 2 + "px " + size / 2 + "px,rgba(" + ele.cr + "," + ele.cg + "," + ele.cb + "," + opacity + ") 0%,rgba(" + ele.cr + "," + ele.cg + "," + ele.cb + "," + opacity + ") " + i + "%,transparent " + i + "%)," + bg;
-            ele.style.backgroundSize = size + "px " + size + "px," + bs;
-            ele.style.backgroundPosition = x + "px " + y + "px," + bp;
-            ele.style.backgroundRepeat = "no-repeat," + br;
+            ele.style.backgroundImage = "radial-gradient(at " + ele.size / 2 + "px " + ele.size / 2 + "px,rgba(" + ele.cr + "," + ele.cg + "," + ele.cb + "," + opacity + ") 0%,rgba(" + ele.cr + "," + ele.cg + "," + ele.cb + "," + opacity + ") " + i + "%,transparent " + i + "%)," + ele.bg;
+            ele.style.backgroundSize = ele.size + "px " + ele.size + "px," + ele.bs;
+            ele.style.backgroundPosition = ele.x + "px " + ele.y + "px," + ele.bp;
+            ele.style.backgroundRepeat = "no-repeat," + ele.br;
             if (i >= 100) {
                 cancelAnimationFrame(ele.raf);
             } else {
                 i += 2;
                 cancelAnimationFrame(ele.raf);
                 ele.raf = requestAnimationFrame(function() {
-                    fnPuff(ele, i, x, y, size, bg, bs, bp, br);
+                    fnPuff(ele, i);
                 });
             }
         }
